@@ -2,18 +2,18 @@
 
 ## About
 
-Upgrade PostgreSQL database into an other database using a simple `docker run`
+Upgrade PostgreSQL database into another database using a simple `docker run`
 
 ## Usage
 
-This Docker image run pg_upgrade by default.
+This Docker image runs pg_upgrade by default.
 
-CMD can be override using `psql` or `bash` or any commands available in
+CMD can be overridden using `psql` or `bash` or any commands available in
 official PostgreSQL docker image. In this case the new database will be
 prepared but pg_upgrade will not be run.
 
-After successful upgrade, new database will be available in `<pg_new_data>`
-folder. Old database in `<pg_old_data>` should not be modified.
+After successful upgrade, the new database will be available in `<pg_new_data>`
+folder. Old database should not be modified.
 
 Docker volumes required (check example below) :
 
@@ -68,7 +68,7 @@ docker run -t -i \
 
 ## Troubleshooting
 
-Would like to use `bash` to debug. Target database will be prepared only (no pg_upgrade)
+Would like to use `bash` to debug? Target database will be prepared only (no pg_upgrade)
 
 ```bash
 docker run -t -i \
