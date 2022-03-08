@@ -34,6 +34,8 @@ Discovered variables:
 * ENCODING (from old $PGUSER database)
 * LOCALE (from old $PGUSER database)
 
+### Example
+
 ```bash
 docker run -t -i \
   -e PG_NEW=13 \
