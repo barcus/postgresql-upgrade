@@ -45,6 +45,27 @@ docker run -t -i \
   bareos/postgresql-upgrade:latest
 ```
 
+### Build
+
+Build you own image:
+
+```bash
+git clone https://github.com/barcus/postgersql-upgrade.git
+cd postgersql-upgrade
+docker build -t my-postgresql-upgrade .
+```
+
+Then use it:
+
+```bash
+docker run -t -i \
+  -e PG_NEW=13 \
+  -e PGUSER=postgres \
+  -v /pg/data:/pg_old/data \
+  -v /pg_new/data:/pg_new/data \
+  my-postgresql-upgrade
+```
+
 ## Troubleshooting
 
 Would like to use `bash` to debug. Target database will be prepared only (no pg_upgrade)
