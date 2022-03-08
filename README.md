@@ -12,13 +12,18 @@ CMD can be override using `psql` or `bash` or any commands available in
 official PostgreSQL docker image. In this case the new database will be
 prepared but pg_upgrade will not be run
 
+Docker volumes required (check example below) :
+
+* `<pg_old_data>`:/pg_old/data
+* `<pg_new_data>`:/pg_new/data
+
+Required variables (check example below):
+
+* PG_NEW (Upgrade to 9.3, 10, 12,...)
+
 Default values:
 
 * PGUSER=postgres
-
-Required variables:
-
-* PG_NEW (Upgrade to 9.3, 10, 12,...)
 
 Discovered variables:
 
