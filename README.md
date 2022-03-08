@@ -42,7 +42,7 @@ docker run -t -i \
   -e PGUSER=postgres \
   -v /pg/data:/pg_old/data \
   -v /pg_new/data:/pg_new/data \
-  bareos/postgresql-upgrade:latest
+  barcus/postgresql-upgrade:latest
 ```
 
 ### Build
@@ -76,7 +76,7 @@ docker run -t -i \
   -e PGUSER=postgres \
   -v /pg/data:/pg_old/data \
   -v /pg_new/data:/pg_new/data \
-  bareos/postgresql-upgrade:latest \
+  barcus/postgresql-upgrade:latest \
   /bin/bash
 ```
 
