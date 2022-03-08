@@ -22,11 +22,11 @@ Docker volumes required (check example below) :
 
 Required variables (check example below):
 
-* PG_NEW (Upgrade to 9.3, 10, 12,...)
+* PGUSER (should exist in old instance)
 
-Default values:
+Optional variables:
 
-* PGUSER=postgres
+* PG_NEW=14
 
 Discovered variables:
 
