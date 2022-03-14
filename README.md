@@ -50,8 +50,8 @@ docker run -t -i \
 Build you own image:
 
 ```bash
-git clone https://github.com/barcus/postgersql-upgrade.git
-cd postgersql-upgrade
+git clone https://github.com/barcus/postgresql-upgrade.git
+cd postgresql-upgrade
 docker build -t my-postgresql-upgrade .
 ```
 
