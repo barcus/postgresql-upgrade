@@ -1,4 +1,4 @@
-# postresql-upgrade
+# postgresql-upgrade
 
 ## About
 
