@@ -47,18 +47,14 @@ if [ "$(id -u)" = '0' ] ;then
   exec gosu postgres "$BASH_SOURCE" "$@"
 fi
 
-if [ "$1" = 'pg_upgrade' -a "$(id -u)" = '0' ] ;then
-  exec gosu postgres "$BASH_SOURCE" "$@"
-fi
-
 # Collect information from PG_OLD
 # Start DB PG_OLD
 eval "${PGBINOLD}/pg_ctl -D ${PGDATAOLD} -l logfile start"
 # Wait for init
 sleep 3
 # Get default DB encoding and local
-ENCODING=$(eval "${PGBINNEW}/psql -t $PGUSER -c 'SHOW SERVER_ENCODING'")
-LOCALE=$(eval "${PGBINNEW}/psql -t $PGUSER -c 'SHOW LC_COLLATE'")
+ENCODING=$(eval "${PGBINOLD}/psql -t $PGUSER -c 'SHOW SERVER_ENCODING'")
+LOCALE=$(eval "${PGBINOLD}/psql -t $PGUSER -c 'SHOW LC_COLLATE'")
 export ENCODING=$(echo ${ENCODING}| xargs)
 export LOCALE=$(echo ${LOCALE}| xargs)
 # Stop DB PG_OLD
@@ -67,7 +63,7 @@ eval "${PGBINOLD}/pg_ctl -D ${PGDATAOLD} -l logfile stop"
 # Init DB PG_NEW  
 [ -z "${ENCODING}" ] && ENCODING="SQL_ASCII"
 [ -z "${LOCALE}" ] && LOCALE="en_US.utf8"
-eval "${PGBINNEW}/initdb --user=${PGUSER} --pgdata=${PGDATANEW} --encoding=${ENCODING} --lc-collate=${LOCALE} --lc-ctype=${LOCALE}"
+eval "${PGBINNEW}/initdb --username=${PGUSER} --pgdata=${PGDATANEW} --encoding=${ENCODING} --lc-collate=${LOCALE} --lc-ctype=${LOCALE}"
 
 if [ "$1" = 'pg_upgrade' ] ;then
   # Upgrade DB PG_OLD into PG_NEW
