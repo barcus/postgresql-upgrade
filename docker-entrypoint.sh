@@ -66,7 +66,7 @@ eval "${PGBINOLD}/pg_ctl -D ${PGDATAOLD} -l logfile stop"
 
 # Init DB PG_NEW  
 [ -z "${ENCODING}" ] && ENCODING="SQL_ASCII"
-[ -z "${LOCALE}" ] && ENCODING="SQL_ASCII"
+[ -z "${LOCALE}" ] && LOCALE="en_US.utf8"
 eval "${PGBINNEW}/initdb --user=${PGUSER} --pgdata=${PGDATANEW} --encoding=${ENCODING} --lc-collate=${LOCALE} --lc-ctype=${LOCALE}"
 
 if [ "$1" = 'pg_upgrade' ] ;then
