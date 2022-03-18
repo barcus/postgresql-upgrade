@@ -21,7 +21,7 @@ export PGDATANEW=/pg_new/data
 export PGUSER="${PGUSER}"
 
 if [ "$#" -eq 0 -o "${1:0:1}" = '-' ]; then
-  set -- pg_upgrade "$@"
+  set -- pg_upgrade
 fi
 
 if [ "$(id -u)" = '0' ] ;then
@@ -65,9 +65,12 @@ eval "${PGBINOLD}/pg_ctl -D ${PGDATAOLD} -l logfile stop"
 [ -z "${LOCALE}" ] && LOCALE="en_US.utf8"
 eval "${PGBINNEW}/initdb --username=${PGUSER} --pgdata=${PGDATANEW} --encoding=${ENCODING} --lc-collate=${LOCALE} --lc-ctype=${LOCALE}"
 
+# run pg_upgrade or launch CMD
 if [ "$1" = 'pg_upgrade' ] ;then
   # Upgrade DB PG_OLD into PG_NEW
   eval "/usr/lib/postgresql/${PG_NEW}/bin/pg_upgrade"
+else
+  exec "$@"
 fi
 
 ## Update pg config listen_address
@@ -79,7 +82,3 @@ fi
 #host	all		all		172.17.0.0/16		trust
 #EOF
 #chown postgres:postgres ${PGDATANEW}/pg_hba.conf
-
-if [ "$1" != 'pg_upgrade' ] ;then
-  exec "$@"
-fi
