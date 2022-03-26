@@ -31,23 +31,23 @@ Either way, the command is run with postgres system user.
 After successful upgrade, new database is available in `<pg_new_data>`
 folder. In any case source database is not modified.
 
+PostgreSQL version, database encoding and locale are discovered from
+source database.
+
+:warning: Be sure to set PGUSER var with an existing superuser in source DB
+
+See example below.
+
 Docker volumes required:
 
 * `/data/pg-old` (should contain source db)
 * `/data/pg-new` (will contain target db)
 
-See example below.
-
 Variables:
 
-* PGUSER=postgres (should exist in source database)
-
-Optional:
-
-* PG_NEW=14 (default v14)
-* PG_OLD (discovered from source PG_VERSION file)
-* ENCODING (discovered from source $PGUSER database)
-* LOCALE (discovered from source $PGUSER database)
+* PGUSER (default postgres)
+* PG_NEW (default 14)
+* DB_INIT (default true)
 
 ### Example
 
