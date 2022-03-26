@@ -1,0 +1,24 @@
+name: push-readme
+
+on:
+  push:
+    paths:
+      - 'README.md'
+      - '.github/workflows/push-readme.yml'
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Update Docker Hub description
+        uses: peter-evans/dockerhub-description@v2.1.0
+        env:
+          DOCKERHUB_USERNAME: barcus
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASS }}
+          DOCKERHUB_REPOSITORY: barcus/postgresql-upgrade
