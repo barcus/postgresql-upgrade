@@ -31,7 +31,7 @@ Either way, the command is run with postgres system user.
 After successful upgrade, new database is available in `<pg_new_data>`
 folder. In any case source database is not modified.
 
-PostgreSQL version, database encoding and locale are discoverd from
+PostgreSQL version, database encoding and locale are discovered from
 source database.
 
 :warning: Be sure to set PGUSER var with an existing superuser in source DB
