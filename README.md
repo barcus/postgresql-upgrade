@@ -4,50 +4,69 @@
 
 Upgrade PostgreSQL database into another database using a simple `docker run`
 
+## Overview
+
+It uses `pg_upgrade` binary from PostgreSQL docker image to upgrade.
+
+It should work for any database version compliant with `pg_uprgade`
+
+:+1: Tested from 9.3+ to [10-14] and more
+
+:warning: `pg_upgrade` is not able to downgrade
+
+## Requirements
+
+* [Docker](https://docs.docker.com/install)
+
 ## Usage
 
-This Docker image runs pg_upgrade by default.
+This Docker image runs `pg_upgrade` as a default command.
 
-CMD can be overridden using `psql` or `bash` or any commands available in
-official PostgreSQL docker image. In this case the new database will be
-prepared but pg_upgrade will not be run.
+Default command (CMD) can be overridden using `psql` or `bash` or any command
+available in official PostgreSQL docker image. In this case new database is
+initialized but `pg_upgrade` is not executed. (See troubleshooting section)
 
-After successful upgrade, the new database will be available in `<pg_new_data>`
-folder. Old database should not be modified.
+Either way, the command is run with postgres system user.
 
-Docker volumes required (check example below) :
+After successful upgrade, new database is available in `<pg_new_data>`
+folder. In any case source database is not modified.
 
-* `<pg_old_data>`:/pg_old/data
-* `<pg_new_data>`:/pg_new/data
+Docker volumes required:
 
-Required variables (check example below):
+* `/data/pg-old` (should contain source db)
+* `/data/pg-new` (will contain target db)
 
-* PGUSER (should exist in old instance)
+See example below.
 
-Optional variables:
+Variables:
 
-* PG_NEW=14
+* PGUSER=postgres (should exist in source database)
 
-Discovered variables:
+Optional:
 
-* PG_OLD (from /pg_old/data/PG_VERSION file)
-* ENCODING (from old $PGUSER database)
-* LOCALE (from old $PGUSER database)
+* PG_NEW=14 (default v14)
+* PG_OLD (discovered from source PG_VERSION file)
+* ENCODING (discovered from source $PGUSER database)
+* LOCALE (discovered from source $PGUSER database)
 
 ### Example
+
+Let's say our source database is located in "/data/pg-old" and the target one
+built in "/data/pg-new". Upgrade to PostgreSQL v13 with "postgres" as
+a superuser.
 
 ```bash
 docker run -t -i \
   -e PG_NEW=13 \
   -e PGUSER=postgres \
-  -v /pg/data:/pg_old/data \
-  -v /pg_new/data:/pg_new/data \
-  barcus/postgresql-upgrade:latest
+  -v /data/pg-old:/pg_old/data \
+  -v /data/pg-new:/pg_new/data \
+  barcus/postgresql-upgrade
 ```
 
-### Build
+## Build
 
-Build you own image:
+Build your own image:
 
 ```bash
 git clone https://github.com/barcus/postgresql-upgrade.git
@@ -61,22 +80,23 @@ Then use it:
 docker run -t -i \
   -e PG_NEW=13 \
   -e PGUSER=postgres \
-  -v /pg/data:/pg_old/data \
-  -v /pg_new/data:/pg_new/data \
+  -v /data/pg-old:/pg_old/data \
+  -v /data/pg-new:/pg_new/data \
   my-postgresql-upgrade
 ```
 
 ## Troubleshooting
 
-Would like to use `bash` to debug? Target database will be prepared only (no pg_upgrade)
+Would like to use `bash` to debug? In this case target database is prepared but
+`pg_upgrade` is not ran.
 
 ```bash
 docker run -t -i \
   -e PG_NEW=13 \
   -e PGUSER=postgres \
-  -v /pg/data:/pg_old/data \
-  -v /pg_new/data:/pg_new/data \
-  barcus/postgresql-upgrade:latest \
+  -v /data/pg-old:/pg_old/data \
+  -v /data/pg-new:/pg_new/data \
+  barcus/postgresql-upgrade \
   /bin/bash
 ```
 
