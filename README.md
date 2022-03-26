@@ -28,20 +28,17 @@ initialized but `pg_upgrade` is not executed. (See troubleshooting section)
 
 Either way, the command is run with postgres system user.
 
-After successful upgrade, new database is available in `<pg_new_data>`
-folder. In any case source database is not modified.
+After successful upgrade, new database is available in the target folder.
+In any case source database is not modified.
 
 PostgreSQL version, database encoding and locale are discovered from
 source database.
 
-:warning: Be sure to set PGUSER var with an existing superuser in source DB
+:warning: Be sure to set PGUSER variable with an existing superuser in source
+database
 
-See example below.
-
-Docker volumes required:
-
-* `/data/pg-old` (should contain source db)
-* `/data/pg-new` (will contain target db)
+Docker volumes for source and target are required.
+The source (old) folder should contain database to migrate. (See example below)
 
 Variables:
 
@@ -63,6 +60,8 @@ docker run -t -i \
   -v /data/pg-new:/pg_new/data \
   barcus/postgresql-upgrade
 ```
+
+`:/pg_old/data` ad `:/pg_new/data` should not be modified.
 
 ## Build
 
