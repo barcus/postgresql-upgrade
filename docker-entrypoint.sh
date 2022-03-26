@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 #set -x
 
-if [ -z "${PGUSER}" ] ; then
-  echo 'ERROR: var PGUSER required'
-  exit 1
-fi 
-
-[ -z "${PG_NEW}" ] && PG_NEW=14
-
+: "${PGUSER:=postgres}"
+: "${PG_NEW:=14}"
+: "${DB_INIT:=true}"
 PG_OLD=$(cat /pg_old/data/PG_VERSION)
+
 re='^[0-9]+([.][0-9]+)?$'
 if ! [[ ${PG_OLD} =~ $re ]] ; then
-   echo "ERROR: /pg_old/data/PG_VERSION file not found" >&2; exit 1
+   echo "ERROR: version not found in file /pg_old/data/PG_VERSION" >&2; exit 1
 fi
 
 export PGBINOLD=/usr/lib/postgresql/${PG_OLD}/bin
@@ -61,9 +58,11 @@ export LOCALE=$(echo ${LOCALE}| xargs)
 eval "${PGBINOLD}/pg_ctl -D ${PGDATAOLD} -l logfile stop"
 
 # Init DB PG_NEW  
-[ -z "${ENCODING}" ] && ENCODING="SQL_ASCII"
-[ -z "${LOCALE}" ] && LOCALE="en_US.utf8"
-eval "${PGBINNEW}/initdb --username=${PGUSER} --pgdata=${PGDATANEW} --encoding=${ENCODING} --lc-collate=${LOCALE} --lc-ctype=${LOCALE}"
+if [ "${DB_INIT}" == 'true' ]; then
+  ENCODING="${ENCODING:=SQL_ASCII}"
+  LOCALE="${LOCALE:=en_US.utf8}"
+  eval "${PGBINNEW}/initdb --username=${PGUSER} --pgdata=${PGDATANEW} --encoding=${ENCODING} --lc-collate=${LOCALE} --lc-ctype=${LOCALE}"
+fi
 
 # run pg_upgrade or launch CMD
 if [ "$1" = 'pg_upgrade' ] ;then
